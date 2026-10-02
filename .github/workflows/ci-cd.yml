@@ -1,0 +1,31 @@
+name: College Event CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check application files
+        run: |
+          test -f index.html
+          test -f style.css
+          test -f script.js
+
+      - name: Build Docker image
+        run: |
+          docker build -t college-event-app .
+
+      - name: Validate Docker Compose
+        run: |
+          docker compose config
